@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
   <meta name="theme-color" content="#4F7DC9">
   <meta charset="UTF-8">
-  <title>AndroidHomeSdk Demo</title>
+  <title>AndroidHomeSdk开发Demo</title>
   <script src="../../bower_components/webcomponentsjs/webcomponents-lite.js"></script>
   <link rel="import" href="../../elements/codelab.html">
   <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
@@ -20,43 +20,43 @@
 </head>
 <body unresolved class="fullbleed">
 
-  <google-codelab title="AndroidHomeSdk Demo"
+  <google-codelab title="AndroidHomeSdk开发Demo"
                   environment="web"
                   feedback-link="https://github.com/TuyaInc/tuyasmart_home_android_sdk/issues">
     
-      <google-codelab-step label="Function Overview" duration="2">
-        <p>The Tuya Smart Home SDK provides the home-based interface encapsulation for the hardware and Tuya Cloud communication to accelerate the App R&amp;D. Main functions of it include:</p>
+      <google-codelab-step label="概述" duration="2">
+        <p>涂鸦全屋智能SDK提供了以家庭为单位，对硬件设备、涂鸦云通讯的接口封装，加速应用开发过程，主要包括了以下功能：</p>
 <ul>
-<li>Network configuration, control, state reporting, timer task, group, firmware upgrading and sharing related to hardware.</li>
-<li>Account system (general account functions such as registration, login, resetting password, etc. of mobile phone number and Email)</li>
-<li>Home management</li>
-<li>ZigBee gateway</li>
-<li>Message center</li>
-<li>Feedback</li>
-<li>See <a href="https://docs.tuya.com/en/cloudapi/appAPI/index.html" target="_blank">Tuya Cloud api</a> invoking for Tuya Cloud HTTP API interface encapsulation.</li>
-<li>SDK interface documentation please refer to：<a href="https://github.com/TuyaInc/tuyasmart_home_android_sdk" target="_blank">Tuya Smart Android SDK</a></li>
+<li>硬件设备相关（配网、控制、状态上报、定时任务、群组、固件升级、共享）</li>
+<li>账户体系（手机号、邮箱的注册、登录、重置密码等通用的账户功能）</li>
+<li>家庭管理</li>
+<li>ZigBee网关</li>
+<li>消息中心</li>
+<li>意见反馈</li>
+<li>涂鸦云HTTP API接口封装 (参见<a href="https://docs.tuya.com/cn/cloudapi/appAPI/index.html" target="_blank">涂鸦云api调用</a>）</li>
+<li>SDK接口文档请参考：<a href="https://github.com/TuyaInc/tuyasmart_home_android_sdk" target="_blank">Tuya Smart Android SDK</a></li>
 </ul>
 
 
       </google-codelab-step>
     
-      <google-codelab-step label="Preparation for integration" duration="3">
-        <h2>Obtain App ID and App Secret</h2>
-<p>Go to the TuyaSmart iot platform<a href="https://iot.tuya.com" target="_blank">https://iot.tuya.com</a>. Create an app by selecting &#34;Create App&#34;, fill in the app name and package name.</p>
-<p><img style="max-width: 602.00px" src="img/ab68acdb3721ddb8.png"></p>
-<p>After the creation is successful. View the application key. Get the app&#39;s App Key and App Secret.</p>
-<p><img style="max-width: 602.00px" src="img/d0b34aef6e25e5f.png"></p>
+      <google-codelab-step label="集成准备" duration="3">
+        <h2>获取App ID和App Secret</h2>
+<p>前往涂鸦iot平台<a href="https://iot.tuya.com" target="_blank">https://iot.tuya.com</a>。选择&#34;创建App&#34;，填写应用名称和包名，创建一款应用。</p>
+<p><img style="max-width: 602.00px" src="img/42bd43e20f9086ee.png"></p>
+<p>创建成功后。查看应用秘钥。获取应用的 App Key 和 App Secret.</p>
+<p><img style="max-width: 602.00px" src="img/478728fd1fe0d7c4.png"></p>
 
 
       </google-codelab-step>
     
-      <google-codelab-step label="Integrate SDK" duration="30">
-        <p>Download the aar package of TuyaHomeSdk on <a href="https://github.com/TuyaInc/tuyasmart_home_android_sdk/tree/master/TuyaSmartHomeSdkDemo/libs" target="_blank">GitHub</a></p>
-<h2>Step1. Introduce the aar Package</h2>
-<p>Import the downloaded aar package of TuyaHomeSdk in the libs directory of the project&#39;s app directory.</p>
+      <google-codelab-step label="集成SDK" duration="30">
+        <p>在<a href="https://github.com/TuyaInc/tuyasmart_home_android_sdk/tree/master/TuyaSmartHomeSdkDemo/libs" target="_blank">GitHub</a>上下载TuyaHomeSdk的aar包</p>
+<h2>Step1. 引入aar包</h2>
+<p>在工程的app目录下的libs目录下导入下载的TuyaHomeSdk的aar包。</p>
 <p><img style="max-width: 309.00px" src="img/de24e073fdba560d.png"></p>
-<h2>Step2. Configuring the build.gradle</h2>
-<p>Add the following configuration to the build.gradle in the app directory.</p>
+<h2>Step2. 配置build.gradle</h2>
+<p>在app目录下的build.gradle中添加如下配置</p>
 <pre><code>defaultConfig {
      ndk {
        abiFilters &#34;armeabi-v7a&#34;, &#34;x86&#34;
@@ -94,20 +94,20 @@
             exclude &#39;META-INF/services/javax.annotation.processing.Processor&#39;
         }
     }</code></pre>
-<h2>Step3. Set the AndroidManifest.xml</h2>
-<p>1. Configure appkey and appSecret under &lt;application&gt; in the AndroidManifest.xml file.</p>
+<h2>Step3. AndroidManifest.xml 设置</h2>
+<p>1. 在AndroidManifest.xml文件里的&lt;application&gt;下配置appkey和appSecret，</p>
 <pre><code>&lt;meta-data
    android:name=&#34;TUYA_SMART_APPKEY&#34;
    android:value=&#34;************&#34; /&gt;
 &lt;meta-data
    android:name=&#34;TUYA_SMART_SECRET&#34;
    android:value=&#34;***********&#34; /&gt;</code></pre>
-<p>2. Add the necessary permission</p>
+<p>2. 添加必要的权限支持</p>
 <pre><code>&lt;!-- sdcard --&gt;
 &lt;uses-permission android:name=&#34;android.permission.WRITE_EXTERNAL_STORAGE&#34; /&gt;
 &lt;uses-permission android:name=&#34;android.permission.READ_EXTERNAL_STORAGE&#34; /&gt;
 &lt;uses-permission android:name=&#34;android.permission.READ_PHONE_STATE&#34; android:required=&#34;false&#34;/&gt;
-
+&lt;!-- 网络 --&gt;
 &lt;uses-permission android:name=&#34;android.permission.INTERNET&#34; /&gt;
 &lt;uses-permission android:name=&#34;android.permission.CHANGE_NETWORK_STATE&#34; /&gt;
 &lt;uses-permission android:name=&#34;android.permission.CHANGE_WIFI_STATE&#34; /&gt;
@@ -116,7 +116,7 @@
 &lt;uses-permission android:name=&#34;android.permission.WAKE_LOCK&#34;android:required=&#34;false&#34; /&gt;
 &lt;!-- added from 2.7.2 --&gt;
 &lt;uses-permission android:name=&#34;android.permission.CHANGE_WIFI_MULTICAST_STATE&#34; android:required=&#34;false&#34;/&gt;</code></pre>
-<p>3.  Add the necessary service and receiver to &lt;application&gt;.</p>
+<p>3.  添加必要的service和receiver。在&lt;application&gt;下添加</p>
 <pre><code>&lt;service
     android:name=&#34;com.tuya.smart.mqtt.MqttService&#34;
     android:stopWithTask=&#34;true&#34; /&gt;
@@ -146,34 +146,9 @@
         &lt;category android:name=&#34;tuya&#34; /&gt;
     &lt;/intent-filter&gt;
 &lt;/service&gt;</code></pre>
-<h2>Step4. Aliasing Configuration</h2>
-<p>Arrange aliasing configuration in corresponding proguard-rules.pro files.</p>
-<pre><code>#fastJson
--keep class com.alibaba.fastjson.**{*;}
--dontwarn com.alibaba.fastjson.**
-
-#netty
--keep class io.netty.** { *; }
--dontwarn io.netty.**
-
-#mqtt
--keep class org.eclipse.paho.client.mqttv3.** { *; }
--dontwarn org.eclipse.paho.client.mqttv3.**
-
--dontwarn okio.**
--dontwarn rx.**
--dontwarn javax.annotation.**
--keep class com.squareup.okhttp.** { *; }
--keep interface com.squareup.okhttp.** { *; }
--keep class okio.** { *; }
--dontwarn com.squareup.okhttp.**
-
--keep class com.tuya.**{*;}
--dontwarn com.tuya.**</code></pre>
-<h2>Step5. Use the ADK function in codes</h2>
-<p>The TuyaHomeSdk is the outbound interface of the Smart Home, and the operations include network configuration, initiation, control, room, group and ZigBee.</p>
-<h3>Initiate Tuya Smart sdk in the Application</h3>
-<p>It is used to initiate components of communication services, etc.</p>
+<h2>Step4. 初始化涂鸦智能sdk</h2>
+<p>TuyaHomeSdk 是一切全屋智能API对外的接口，包含：配网、初始化、控制、房间、群组、ZigBee等一系列的操作。</p>
+<h3>Application中初始化涂鸦智能sdk</h3>
 <pre><code>public class TuyaSmartApp extends Application {
    @Override
    public void onCreate() {
@@ -181,25 +156,25 @@
        TuyaHomeSdk.init(this);
    }
 }</code></pre>
-<aside class="special"><p>Note： The appId and appSecret need to be configured in the AndroidManifest.xml file or the build environment or the codes.</p>
+<aside class="special"><p>提示： appId和appSecret需要配置AndroidManifest.xml文件里，或者在build环境里配置，也可以在代码里写入。</p>
 </aside>
-<h2>Step6. Logout of the Tuya Smart Cloud connection</h2>
-<p>The following interface needs to be invoked to log out of the App.</p>
+<h2>Step5. 注销涂鸦智能云连接</h2>
+<p>在退出应用的时候调用以下接口注销掉。</p>
 <pre><code>TuyaHomeSdk.onDestroy();</code></pre>
 
 
       </google-codelab-step>
     
-      <google-codelab-step label="User management-Use Mobile Phone" duration="30">
-        <aside class="warning"><p>Note⚠️：In the registration and login methods, you need to provide the countryCode parameter (country code), such as the United States: 1 China: 86; the country code number to fill in is used to select the available area of the TuyaSmart cloud. The data of each available area is independent of each other, so the account registered in China (86) cannot be used in the US (1) (the interface will prompt the user for the error that does not exist).</p>
-<p>For more concepts, please see: <a href="https://docs.tuya.com/en/cloudapi/" target="_blank">Tuya Smart Cloud Platform Overview</a></p>
+      <google-codelab-step label="用户管理-手机账号体系" duration="30">
+        <aside class="warning"><p>注意⚠️：在注册、登录方法中，需要提供countryCode参数（国家区号），如美国：1  中国：86；填写的国家区号用于就近选择涂鸦云的可用区。各个可用区的数据是相互独立的，因此在中国大陆（86）注册的账号，在美国(1)无法使用（用户不存在）。</p>
+<p>可用区相关概念请查看：<a href="https://docs.tuya.com/cn/cloudapi/" target="_blank">涂鸦云-可用区</a></p>
 </aside>
 <ol type="1" start="1">
-<li><h2>Mobile number registration</h2>
+<li><h2>手机号码注册</h2>
 </li>
 </ol>
-<p>The mobile phone verification code login function needs to first call the verification code sending interface and send the verification code. Then call the phone verification code verification interface. Fill in the received verification code into the corresponding parameters.</p>
-<h3>Send a mobile phone verification code</h3>
+<p>手机验证码登录功能，需要先调用验证码发送接口，发送验证码。再调用手机验证码验证接口。将收到的验证码填入对应的参数中。</p>
+<h3>发送手机验证码</h3>
 <pre><code>TuyaHomeSdk.getUserInstance().getEmailValidateCode(mCountryCode, mEmail, mIValidateCallback);</code></pre>
 <pre><code>private IValidateCallback mIValidateCallback = new IValidateCallback() {
    @Override
@@ -212,15 +187,15 @@
        getValidateCodeFail(s, s1);
    }
 };</code></pre>
-<h3>Call the <code>registerAccountWithPhone </code>interface mobile account to register</h3>
+<h3>调用<code>registerAccountWithPhone接口手机账号进行注册</code></h3>
 <pre><code>TuyaHomeSdk.getUserInstance().registerAccountWithPhone(mCountryCode, mPhoneNum, mView.getPassword(), mView.getValidateCode(), mIRegisterCallback);</code></pre>
 <ol type="1" start="2">
-<li><h2>Use Mobile Phone Password for Login</h2>
+<li><h2>手机密码登陆</h2>
 </li>
 </ol>
-<p>Use mobile phone password for login.</p>
+<p>使用手机号码和密码登陆。调用<a href="https://tuyainc.github.io/tuyasmart_home_android_sdk_doc/zh-hans/resource/User_mobile.html" target="_blank"><code>loginWithPhonePassword</code></a>接口。</p>
 <pre><code>TuyaHomeSdk.getUserInstance().loginWithPhonePassword(mCountryCode, mPhoneNum, mView.getPassword(), mILoginCallback);</code></pre>
-<p>In the <code>mILoginCallback</code> callback success, you can jump to the home page and other operations.</p>
+<p>在<code>mILoginCallback</code> 回调成功即可跳转到主页等操作。</p>
 <pre><code>private ILoginCallback mILoginCallback = new ILoginCallback() {
    @Override
    public void onSuccess(User user) {
@@ -233,11 +208,11 @@
    }
 };</code></pre>
 <ol type="1" start="3">
-<li><h2>Use Mobile Phone Verification Code for Login</h2>
+<li><h2>手机验证码登陆</h2>
 </li>
 </ol>
-<p>The mobile phone verification code login function needs to first call the verification code sending interface and send the verification code. Then call the phone verification code verification interface. Fill in the received verification code into the corresponding parameters.</p>
-<h3>Get verification code</h3>
+<p>手机验证码登录功能，需要先调用验证码发送接口，发送验证码。再调用手机验证码验证接口。将收到的验证码填入对应的参数中。</p>
+<h3>获取验证码</h3>
 <pre><code>TuyaHomeSdk.getUserInstance().getValidateCode(mPhoneCode, mView.getPhone(), new IValidateCallback() {
    @Override
    public void onSuccess() {
@@ -249,7 +224,7 @@
        getValidateCodeFail(s, s1);
    }
 });</code></pre>
-<h3>Sign in with your phone verification code</h3>
+<h3>手机验证码登陆</h3>
 <pre><code>TuyaHomeSdk.getUserInstance().loginWithPhone(mPhoneCode, phoneNumber, code, new ILoginCallback() {
    @Override
    public void onSuccess(User user) {
@@ -263,45 +238,45 @@
    }
 });</code></pre>
 <ol type="1" start="4">
-<li><h2>Reset phone account password</h2>
+<li><h2>手机重置密码</h2>
 </li>
 </ol>
-<h3>Get verification code</h3>
+<h3>获取验证码</h3>
 <pre><code>TuyaHomeSdk.getUserInstance().getValidateCode(mCountryCode, mPhoneNum, mIValidateCallback);</code></pre>
-<h3>Reset Password</h3>
+<h3>重置密码</h3>
 <pre><code>TuyaHomeSdk.getUserInstance().resetPhonePassword(mCountryCode, mPhoneNum, mView.getValidateCode(), mView.getPassword(), mIResetPasswordCallback);</code></pre>
 
 
       </google-codelab-step>
     
-      <google-codelab-step label="User management-Email account system" duration="30">
+      <google-codelab-step label="用户管理-邮箱账号体系" duration="30">
         <ol type="1" start="1">
-<li><h3>User Email Box Password Registration</h3>
+<li><h3>用户邮箱密码注册</h3>
 </li>
 </ol>
-<h3>Call the send mailbox verification code interface to get the verification code</h3>
+<h3>调用发送邮箱验证码</h3>
 <pre><code>TuyaHomeSdk.getUserInstance().getRegisterEmailValidateCode(mCountryCode,mEmail,iResultCallback);</code></pre>
-<h3>Call the mailbox registration interface</h3>
+<h3>调用邮箱注册接口</h3>
 <pre><code>TuyaHomeSdk.getUserInstance().registerAccountWithEmail(mCountryCode, mEmail, mView.getPassword(), mView.getValidateCode(),mIRegisterCallback);</code></pre>
 <ol type="1" start="2">
-<li><h3>Log in with your email account and password</h3>
+<li><h3>用户邮箱密码登陆</h3>
 </li>
 </ol>
 <pre><code>TuyaHomeSdk.getUserInstance().loginWithEmail(mCountryCode, userName, password, mLoginCallback);</code></pre>
 <ol type="1" start="3">
-<li><h3>Reset password for email account</h3>
+<li><h3>用户邮箱重置密码</h3>
 </li>
 </ol>
-<h3>Get the mailbox verification code</h3>
+<h3>邮箱找回密码，获取验证码</h3>
 <pre><code>TuyaHomeSdk.getUserInstance().getEmailValidateCode(mCountryCode, mEmail, mIValidateCallback);</code></pre>
-<h3>Reset password for email account</h3>
+<h3>邮箱重置密码</h3>
 <pre><code>TuyaHomeSdk.getUserInstance().resetEmailPassword(mCountryCode, mEmail, mView.getValidateCode(), mView.getPassword(), mIResetPasswordCallback);</code></pre>
 
 
       </google-codelab-step>
     
-      <google-codelab-step label="Sign out" duration="5">
-        <p>When the user account is switched, you need to call the logout interface.</p>
+      <google-codelab-step label="退出登录" duration="5">
+        <p>用户账号切换的时候需要调用退出登录接口</p>
 <pre><code>@Override
 public void logout() {
    TuyaHomeSdk.getUserInstance().logout(new ILogoutCallback() {
@@ -321,8 +296,8 @@ public void logout() {
 
       </google-codelab-step>
     
-      <google-codelab-step label="Monitor the invalidity of registered session" duration="5">
-        <p>Because of abnormality or long-time absence of operation for 45 or more days, the session will become invalid, and user has to log out of the App and log in again to obtain the session.</p>
+      <google-codelab-step label="session失效监听" duration="5">
+        <p>Session由于可能存在一些异常或者在一段时间不操作（45天）会失效掉，这时候需要退出应用，重新登陆获取Session。</p>
 <pre><code>TuyaSdk.setOnNeedLoginListener(new INeedLoginListener() {
    @Override
    public void onNeedLogin(Context context) {
@@ -333,8 +308,10 @@ public void logout() {
        startActivity(intent);
    }
 });</code></pre>
-<aside class="warning"><p>Note⚠️：</p>
-<p>In case of this kind of callback, please go to the login page and require the user to log in again.</p>
+<aside class="warning"><p>注意⚠️：</p>
+<ul>
+<li>一旦出现此类回调，请跳转到登陆页面，让用户重新登陆。</li>
+</ul>
 </aside>
 
 

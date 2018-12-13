@@ -1,15 +1,15 @@
 {
   "environment": "web",
-  "source": "1F2VkOrTW5q6kCjgwVSUEUwZI303BloMZbqNWbSM6YMY",
+  "source": "13iW8W-6lNEoYQdJijf1QBfDj9pYSdCd2zjqIAIqi2JE",
   "format": "html",
   "prefix": "../../",
   "mainga": "UA-49880327-14",
-  "updated": "2018-12-13T11:48:26Z",
-  "id": "android_home_sdk_demo_en",
+  "updated": "2018-12-13T11:48:54Z",
+  "id": "android_home_sdk_demo_cn",
   "duration": 105,
-  "title": "AndroidHomeSdk Demo",
+  "title": "AndroidHomeSdk开发Demo",
   "author": "tuya",
-  "summary": "AndroidHomeSdk demo-en",
+  "summary": "AndroidHomeSdk开发demo",
   "theme": "web",
   "status": [
     "draft"
@@ -19,5 +19,5 @@
   ],
   "tags": [],
   "feedback": "https://github.com/TuyaInc/tuyasmart_home_android_sdk/issues",
-  "url": "android_home_sdk_demo_en"
+  "url": "android_home_sdk_demo_cn"
 }
