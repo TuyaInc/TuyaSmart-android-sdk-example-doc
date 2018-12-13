@@ -146,7 +146,31 @@
         &lt;category android:name=&#34;tuya&#34; /&gt;
     &lt;/intent-filter&gt;
 &lt;/service&gt;</code></pre>
-<h2>Step4. 初始化涂鸦智能sdk</h2>
+<h2>Step4. 混淆配置</h2>
+<p>在proguard-rules.pro文件配置相应混淆配置</p>
+<pre><code>#fastJson
+-keep class com.alibaba.fastjson.**{*;}
+-dontwarn com.alibaba.fastjson.**
+
+#netty
+-keep class io.netty.** { *; }
+-dontwarn io.netty.**
+
+#mqtt
+-keep class org.eclipse.paho.client.mqttv3.** { *; }
+-dontwarn org.eclipse.paho.client.mqttv3.**
+
+-dontwarn okio.**
+-dontwarn rx.**
+-dontwarn javax.annotation.**
+-keep class com.squareup.okhttp.** { *; }
+-keep interface com.squareup.okhttp.** { *; }
+-keep class okio.** { *; }
+-dontwarn com.squareup.okhttp.**
+
+-keep class com.tuya.**{*;}
+-dontwarn com.tuya.**</code></pre>
+<h2>Step5. 初始化涂鸦智能sdk</h2>
 <p>TuyaHomeSdk 是一切全屋智能API对外的接口，包含：配网、初始化、控制、房间、群组、ZigBee等一系列的操作。</p>
 <h3>Application中初始化涂鸦智能sdk</h3>
 <pre><code>public class TuyaSmartApp extends Application {
@@ -158,7 +182,7 @@
 }</code></pre>
 <aside class="special"><p>提示： appId和appSecret需要配置AndroidManifest.xml文件里，或者在build环境里配置，也可以在代码里写入。</p>
 </aside>
-<h2>Step5. 注销涂鸦智能云连接</h2>
+<h2>Step6. 注销涂鸦智能云连接</h2>
 <p>在退出应用的时候调用以下接口注销掉。</p>
 <pre><code>TuyaHomeSdk.onDestroy();</code></pre>
 
