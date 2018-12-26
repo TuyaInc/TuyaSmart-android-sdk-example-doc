@@ -340,6 +340,336 @@ public void logout() {
 
       </google-codelab-step>
     
+      <google-codelab-step label="Family management" duration="10">
+        <h3>1.Create Family</h3>
+<h3> </h3>
+<pre><code>TuyaHomeSdk.getHomeManagerInstance().createHome(homeName,
+       lon, lat, geoName, roomList, new ITuyaHomeResultCallback() {
+           @Override
+           public void onSuccess(HomeBean homeBean) {
+            
+           }
+
+           @Override
+           public void onError(String errorCode, String errorMsg) {
+           
+           }
+       });</code></pre>
+<h3>2.Get  Family List</h3>
+<aside class="warning"><p>prompt⚠️：</p>
+<p>    SDK won&#39;t maintain home&#39;s family list cache，if you need，you can manage by yourself, the list you get will only include basic information:lon，lat, geoName , name ，rooms，homeId,admin.</p>
+</aside>
+<pre><code>TuyaHomeSdk.getHomeManagerInstance().queryHomeList(new ITuyaGetHomeListCallback() {
+   @Override
+   public void onSuccess(List&lt;HomeBean&gt; homeList) {
+     
+   }
+
+   @Override
+   public void onError(String errorCode, String errorMsg) {
+      
+   }
+});</code></pre>
+<h3>2.Get  Family Detail Info</h3>
+<aside class="warning"><p>prompt⚠️：</p>
+<p>    SDK will cache the single family all of the information, call after getHomeDetail TuyaHomeSdk.newHomeInstance(homeId).getHomeBean() for cache room information</p>
+</aside>
+<pre><code>TuyaHomeSdk.newHomeInstance(homeId).getHomeDetail(new ITuyaHomeResultCallback() {
+   @Override
+   public void onSuccess(HomeBean homeBean) {
+      
+   }
+
+   @Override
+   public void onError(String errorCode, String errorMsg) {
+
+   }
+});</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Network Configuration" duration="10">
+        <h3>Wifi Network Configuration</h3>
+<p>Get Network Configuration Token</p>
+<pre><code>/**
+ * @param homeId(Reference family management section)
+ * @param callback
+ */
+TuyaHomeSdk.getActivatorInstance().getActivatorToken(homeId, new ITuyaActivatorGetToken() {
+            @Override
+            public void onSuccess(String token) {
+
+            }
+
+            @Override
+            public void onFailure(String s, String s1) {
+
+            }
+        });</code></pre>
+<p>Initialize The Network Configuration Parameter</p>
+<pre><code>/**
+ * @param token: The activation key required for network configuration.
+ * @param ssid: Name of the Wifi used by devices in working after the network isconfigured.  (Home network)
+ * @param password: Password of the Wifi used by devices in working after the network is configured.  (Home network)
+ * @param activatorModel: Currently, the following two methods are used for network configuration of devices.
+          ActivatorModelEnum.TY_EZ: The EZ mode network configuration is enabled is this parameter is transfered.
+          ActivatorModelEnum.TY_AP: The AP mode network configuration is enabled is this parameter is transfered.
+ * @param timeout: The timeout for the network configuration is set to 100s by default.
+ * @param context: The context that is needed to be transferred to the activity.
+ */</code></pre>
+<p>EZ Mode Configuration</p>
+<pre><code>ITuyaActivator mTuyaActivator = TuyaHomeSdk.getActivatorInstance().newMultiActivator(new ActivatorBuilder()
+        .setSsid(ssid)
+        .setContext(context)
+        .setPassword(password)
+        .setActivatorModel(ActivatorModelEnum.TY_EZ)
+        .setTimeOut(CONFIG_TIME_OUT)
+        .setToken(token)
+        .setListener(this));</code></pre>
+<p>AP Mode Configuration</p>
+<pre><code>ITuyaActivator mTuyaActivator = TuyaHomeSdk.getActivatorInstance().newActivator(new ActivatorBuilder()
+        .setSsid(ssid)
+        .setContext(context)
+        .setPassword(password)
+        .setActivatorModel(ActivatorModelEnum.TY_AP)
+        .setTimeOut(CONFIG_TIME_OUT)
+        .setToken(token)
+        .setListener(this));</code></pre>
+<p>Configuration Method Invocation</p>
+<pre><code>mTuyaActivator.start(); // Start configuration
+
+mTuyaActivator.stop(); // Stop configuration
+
+mTuyaActivator.onDestroy(); // Exit the page to destroy some cache data and monitoring data.</code></pre>
+<p>Configuration Result Callback</p>
+<pre><code>ITuyaSmartActivatorListener  listener = new ITuyaSmartActivatorListener() {
+                @Override
+                public void onError(String errorCode, String errorMsg) {
+                                                
+                }
+
+                @Override
+                public void onActiveSuccess(DeviceBean deviceBean) {
+                        
+                }
+
+                @Override
+                public void onStep(String step, Object data) {
+
+                }
+            })</code></pre>
+<h3>Network Configuration for ZigBee Gateway</h3>
+<p>Get Network Configuration Token</p>
+<pre><code>/**
+ * @param homeId(Reference family management section)
+ * @param callback
+ */
+TuyaHomeSdk.getActivatorInstance().getActivatorToken(homeId, new ITuyaActivatorGetToken() {
+            @Override
+            public void onSuccess(String token) {
+
+            }
+
+            @Override
+            public void onFailure(String s, String s1) {
+y
+            }
+        });</code></pre>
+<p>Configuration Method Invocation</p>
+<pre><code>// Initialize listener
+ITuyaSmartActivatorListener listener = new ITuyaSmartActivatorListener() {
+                @Override
+                public void onError(String errorCode, String errorMsg) {
+                                                
+                }
+
+                @Override
+                public void onActiveSuccess(DeviceBean deviceBean) {
+                        
+                }
+                @Override
+                public void onStep(String step, Object data) {
+
+                }
+            })
+
+ITuyaActivator mITuyaActivator = TuyaHomeSdk.getActivatorInstance().newGwActivator(new TuyaGwActivatorBuilder()
+            .setToken(token)
+            .setTimeOut(100)
+            .setContext(this)
+            .setListener(listener);
+
+// Start network configuration
+mITuyaActivator.start()
+// Stop network configuration
+mITuyaActivator.stop()
+// Exit the page to clean up
+mITuyaActivator.onDestroy()</code></pre>
+<h3>Network Configuration for ZigBee Sub-device</h3>
+<p>Configuration Method Invocation</p>
+<pre><code>TuyaGwSubDevActivatorBuilder builder = new TuyaGwSubDevActivatorBuilder()
+                    // Setting the gateway ID
+                    .setDevId(mDevId)
+                    // Setting the time-out period for network configuration
+                    .setTimeOut(100)
+                    .setListener(new ITuyaSmartActivatorListener() {
+                        @Override
+                        public void onError(String s, String s1) {
+                        }
+
+                        @Override
+                        public void onActiveSuccess(DeviceBean deviceBean) {
+                        }
+
+                        @Override
+                        public void onStep(String s, Object o) {
+                        }
+                    });
+
+ITuyaActivator mTuyaGWActivator = TuyaHomeSdk.getActivatorInstance(). newGwSubDevActivator(builder);
+// Start network configuration
+mTuyaGWActivator.start();
+// Stop network configuration
+mTuyaGWActivator.stop();
+// Destroy
+mTuyaGWActivator.onDestory();</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Group Management" duration="0">
+        <h3>Group List Acquisition</h3>
+<p>Obtain the device list of product when the group is not created.</p>
+<pre><code>//the group is not created, parameter groupId must be an integer 0
+TuyaHomeSdk.newHomeInstance(&#34;homeId&#34;).queryDeviceListToAddGroup(groupId, &#34;productId&#34;, new IGetDevsFromGroupByPidCallback() {
+    @Override
+    public void onSuccess(List&lt;GroupDeviceBean&gt; bizResult) {
+
+    }
+
+    @Override
+    public void onError(String errorCode, String errorMsg) {
+
+    }
+});</code></pre>
+<p>Obtain the device list of a group when the group is created.</p>
+<pre><code>TuyaHomeSdk.newHomeInstance(&#34;homeId&#34;).queryDeviceListToAddGroup(groupId, &#34;productId&#34;, new IGetDevsFromGroupByPidCallback() {
+    @Override
+    public void onSuccess(List&lt;GroupDeviceBean&gt; bizResult) {
+
+    }
+
+    @Override
+    public void onError(String errorCode, String errorMsg) {
+
+    }
+});</code></pre>
+<h3>Creating a Group</h3>
+<pre><code>TuyaHomeSdk.newHomeInstance(&#34;homeId&#34;).createNewGroup(&#34;productId&#34;, &#34;name&#34;, devIds, new ICreateGroupCallback() {
+    @Override
+    public void onSuccess(long groupId) {
+                        //return groupId
+    }
+
+    @Override
+    public void onError(String errorCode, String errorMsg) {
+
+    }
+});</code></pre>
+<h3> Edit Group</h3>
+<pre><code>TuyaHomeSdk.newGroupInstance(groupId).updateDeviceList(deviceIds, new IResultCallback() {
+                @Override
+                public void onError(String s, String s1) {
+
+                }
+
+                @Override
+                public void onSuccess() {
+
+                }
+            });</code></pre>
+<h3>Dismiss Group</h3>
+<pre><code>TuyaHomeSdk.newGroupInstance(groupId).dismissGroup(new IResultCallback() {
+                @Override
+                public void onError(String s, String s1) {
+        
+                }
+        
+                @Override
+                public void onSuccess() {
+        
+                }
+            });</code></pre>
+<h3>Modifying group name</h3>
+<pre><code>TuyaHomeSdk.newGroupInstance(groupId).renameGroup(titleName, new IResultCallback() {
+            @Override
+            public void onError(String s, String s1) {
+
+            }
+
+            @Override
+            public void onSuccess() {
+                           }
+        });</code></pre>
+<h3>Group Operation</h3>
+<h4>Instantiation</h4>
+<pre><code>* Instantiation of groups
+* @param groupId        group Id
+ITuyaGroup mITuyaGroup= TuyaHomeSdk.newGroupInstance(groupId);</code></pre>
+<h4>Group callback event</h4>
+<pre><code>* Registering group callback event
+* @param listener callback
+mITuyaGroup.registerGroupListener(new IGroupListener() {
+            @Override
+            public void onDpUpdate(long l, String s) {
+
+            }
+
+            @Override
+            public void onGroupInfoUpdate(long l) {
+
+            }
+
+            @Override
+            public void onGroupRemoved(long l) {
+
+            }
+        });
+
+* Cancel group callback event
+mITuyaGroup.unRegisterGroupListener();</code></pre>
+<h4>Sending group control command</h4>
+<pre><code>* Sending group control command
+* @param command        control command
+* @param listener callback
+mTuyaGroup.publishDps(String command,IControlCallback listener);</code></pre>
+<p>Example Codes</p>
+<pre><code>//Code segment for switching on the light in a group
+LampBean bean = new LampBean();
+bean.setOpen(true);
+HashMap&lt;String, Object&gt; hashMap = new HashMap&lt;&gt;();
+hashMap.put(STHEME_LAMP_DPID_1, bean.isOpen());
+mTuyaGroup.publishDps(JSONObject.toJSONString(hashMap),callback)；</code></pre>
+<p>Notes</p>
+<pre><code>The returned result of a command sent from a group means that the command is sent to the cloud successfully, and it does not mean that the device has been actually controlled.</code></pre>
+<h4> Group data acquisition</h4>
+<p>For obtaining the group data locally, the data cannot be obtained before the initialization of Home (invoking getHomeDetail() or getHomeLocalCache).</p>
+<pre><code>* Obtaining group data bean locally
+* @param groupId    group Id
+* @return GroupBean  class of group data
+TuyaHomeDataManager.getInstance().getGroupBean(long groupId);
+
+* Obtaining a list of group data locally
+* @return  List&lt;GroupBean&gt;  group list
+TuyaHomeDataManager.getInstance().getGroupDeviceList(long groupId);</code></pre>
+<h4>Group data destruction</h4>
+<pre><code>//It is recommended to invoke the group data destruction function when exiting the group control page.
+mITuyaGroup.onDestroy();</code></pre>
+
+
+      </google-codelab-step>
+    
   </google-codelab>
 
   <script>

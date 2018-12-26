@@ -341,6 +341,342 @@ public void logout() {
 
       </google-codelab-step>
     
+      <google-codelab-step label="家庭管理" duration="10">
+        <h3>1.创建家庭</h3>
+<pre><code>TuyaHomeSdk.getHomeManagerInstance().createHome(homeName,
+       lon, lat, geoName, roomList, new ITuyaHomeResultCallback() {
+           @Override
+           public void onSuccess(HomeBean homeBean) {
+            
+           }
+
+           @Override
+           public void onError(String errorCode, String errorMsg) {
+           
+           }
+       });</code></pre>
+<h3>2.获取家庭列表</h3>
+<aside class="warning"><p>提示⚠️：</p>
+<p>SDK不维护房间的家庭列表的缓存，如果需要可以自己管理</p>
+<p>获取的家庭列表信息只包含基础信息：lon（经度），lat（纬度) , geoName（家庭地理位置名称） , name(家庭名称) ，rooms(房间列表)，homeId(家庭Id),admin（管理员身份）</p>
+</aside>
+<pre><code>TuyaHomeSdk.getHomeManagerInstance().queryHomeList(new ITuyaGetHomeListCallback() {
+   @Override
+   public void onSuccess(List&lt;HomeBean&gt; homeList) {
+     
+   }
+
+   @Override
+   public void onError(String errorCode, String errorMsg) {
+      
+   }
+});</code></pre>
+<h3>3.获取家庭的所有信息</h3>
+<aside class="warning"><p>提示⚠️：</p>
+<p>SDK会缓存单个家庭的所有信息，调用getHomeDetail之后,TuyaHomeSdk.newHomeInstance(homeId).getHomeBean()可获取缓存的房间信息</p>
+</aside>
+<pre><code>TuyaHomeSdk.newHomeInstance(homeId).getHomeDetail(new ITuyaHomeResultCallback() {
+   @Override
+   public void onSuccess(HomeBean homeBean) {
+      
+   }
+
+   @Override
+   public void onError(String errorCode, String errorMsg) {
+
+   }
+});
+</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="设备配网" duration="10">
+        <h3>WiFi配网</h3>
+<p>获取配网token</p>
+<pre><code>/**
+* @param homeId(参考家庭管理章节)
+* @param callback
+*/
+TuyaHomeSdk.getActivatorInstance().getActivatorToken(homeId, new ITuyaActivatorGetToken() {
+           @Override
+           public void onSuccess(String token) {
+
+           }
+
+           @Override
+           public void onFailure(String s, String s1) {
+
+           }
+       });
+</code></pre>
+<p>初始化配网参数</p>
+<pre><code>/**
+* @param token: 配网所需要的激活key。
+* @param ssid: 配网之后，设备工作WiFi的名称。（家庭网络）
+* @param password: 配网之后，设备工作WiFi的密码。（家庭网络）
+* @param activatorModel: 现在给设备配网有以下两种方式:
+         ActivatorModelEnum.TY_EZ: 传入该参数则进行EZ配网
+         ActivatorModelEnum.TY_AP: 传入该参数则进行AP配网
+* @param timeout: 配网的超时时间设置，默认是100s.
+* @param context: 需要传入activity的context.
+*/</code></pre>
+<p>EZ配网模式</p>
+<pre><code>mTuyaActivator = TuyaHomeSdk.getActivatorInstance().newMultiActivator(new ActivatorBuilder()
+       .setSsid(ssid)
+       .setContext(context)
+       .setPassword(password)
+       .setActivatorModel(ActivatorModelEnum.TY_EZ)
+       .setTimeOut(CONFIG_TIME_OUT)
+       .setToken(token)
+       .setListener(this));</code></pre>
+<p>AP配网模式</p>
+<pre><code>mTuyaActivator = TuyaHomeSdk.getActivatorInstance().newActivator(new ActivatorBuilder()
+        .setSsid(ssid)
+        .setContext(context)
+        .setPassword(password)
+        .setActivatorModel(ActivatorModelEnum.TY_AP)
+        .setTimeOut(CONFIG_TIME_OUT)
+        .setToken(token)
+        .setListener(this));</code></pre>
+<p>配网方法调用</p>
+<pre><code>mTuyaActivator.start(); //开始配网
+
+mTuyaActivator.stop(); //停止配网
+
+mTuyaActivator.onDestroy(); //退出页面销毁一些缓存和监听</code></pre>
+<p>配网结果回调</p>
+<pre><code>ITuyaSmartActivatorListener  listener = new ITuyaSmartActivatorListener() {
+                @Override
+                public void onError(String errorCode, String errorMsg) {
+                                                
+                }
+
+                @Override
+                public void onActiveSuccess(DeviceBean deviceBean) {
+                        
+                }
+
+                @Override
+                public void onStep(String step, Object data) {
+
+                }
+            })</code></pre>
+<h3>ZigBee网关配网</h3>
+<p>获取配网token</p>
+<pre><code>/**
+ * @param homeId(参考家庭管理章节)
+ * @param callback
+ */
+TuyaHomeSdk.getActivatorInstance().getActivatorToken(homeId, new ITuyaActivatorGetToken() {
+            @Override
+            public void onSuccess(String token) {
+
+            }
+
+            @Override
+            public void onFailure(String s, String s1) {
+
+            }
+        });</code></pre>
+<p>配网方法调用</p>
+<pre><code>//初始化监听
+ITuyaSmartActivatorListener  listener = new ITuyaSmartActivatorListener() {
+                @Override
+                public void onError(String errorCode, String errorMsg) {
+                                                
+                }
+
+                @Override
+                public void onActiveSuccess(DeviceBean deviceBean) {
+                        
+                }
+
+                @Override
+                public void onStep(String step, Object data) {
+
+                }
+            })
+ITuyaActivator mITuyaActivator = TuyaHomeSdk.getActivatorInstance().newGwActivator(new TuyaGwActivatorBuilder()
+            .setToken(token)
+            .setTimeOut(100)
+            .setContext(this)
+            .setListener(listener);
+            
+//开始配网
+mITuyaActivator.start()
+//停止配网
+mITuyaActivator.stop()
+//退出页面清理
+mITuyaActivator.onDestroy()</code></pre>
+<h3>ZigBee子设备配网</h3>
+<p>配网方法调用</p>
+<pre><code>TuyaGwSubDevActivatorBuilder builder = new TuyaGwSubDevActivatorBuilder()
+                        //设置网关ID
+                        .setDevId(mDevId)
+                        //设置配网超时时间
+                        .setTimeOut(100)
+                        .setListener(new ITuyaSmartActivatorListener() {
+                            @Override
+                            public void onError(String s, String s1) {
+                            }
+
+                            @Override
+                            public void onActiveSuccess(DeviceBean deviceBean) {
+                            }
+
+                            @Override
+                            public void onStep(String s, Object o) {
+                            }
+                        });
+
+ITuyaActivator mTuyaGWActivator = TuyaHomeSdk.getActivatorInstance().newGwSubDevActivator(builder);
+//开始配网
+mTuyaGWActivator.start();
+//停止配网
+mTuyaGWActivator.stop();
+//销毁
+mTuyaGWActivator.onDestory();</code></pre>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="群组管理" duration="10">
+        <h3>群组列表获取</h3>
+<p>群组未创建，获取可创建群组的设备列表</p>
+<pre><code>//群组未创建，入参groupId传0
+TuyaHomeSdk.newHomeInstance(&#34;homeId&#34;).queryDeviceListToAddGroup(groupId, &#34;productId&#34;, new IGetDevsFromGroupByPidCallback() {
+    @Override
+    public void onSuccess(List&lt;GroupDeviceBean&gt; bizResult) {
+
+    }
+
+    @Override
+    public void onError(String errorCode, String errorMsg) {
+
+    }
+});</code></pre>
+<p>群组已经创建，获取群组的设备列表</p>
+<pre><code>TuyaHomeSdk.newHomeInstance(&#34;homeId&#34;).queryDeviceListToAddGroup(groupId, &#34;productId&#34;, new IGetDevsFromGroupByPidCallback() {
+    @Override
+    public void onSuccess(List&lt;GroupDeviceBean&gt; bizResult) {
+
+    }
+
+    @Override
+    public void onError(String errorCode, String errorMsg) {
+
+    }
+});</code></pre>
+<h3> 创建群组</h3>
+<pre><code>TuyaHomeSdk.newHomeInstance(&#34;homeId&#34;).createNewGroup(&#34;productId&#34;, &#34;name&#34;, devIds, new ICreateGroupCallback() {
+    @Override
+    public void onSuccess(long groupId) {
+                        //返回groupId
+    }
+
+    @Override
+    public void onError(String errorCode, String errorMsg) {
+
+    }
+});</code></pre>
+<h3>编辑群组</h3>
+<pre><code>TuyaHomeSdk.newGroupInstance(groupId).updateDeviceList(deviceIds, new IResultCallback() {
+                @Override
+                public void onError(String s, String s1) {
+
+                }
+
+                @Override
+                public void onSuccess() {
+
+                }
+            });</code></pre>
+<h3>解散群组</h3>
+<pre><code>TuyaHomeSdk.newGroupInstance(groupId).dismissGroup(new IResultCallback() {
+                @Override
+                public void onError(String s, String s1) {
+        
+                }
+        
+                @Override
+                public void onSuccess() {
+        
+                }
+            });</code></pre>
+<h3>修改群组名称</h3>
+<pre><code>TuyaHomeSdk.newGroupInstance(groupId).renameGroup(titleName, new IResultCallback() {
+            @Override
+            public void onError(String s, String s1) {
+
+            }
+
+            @Override
+            public void onSuccess() {
+                           }
+        });</code></pre>
+<h3>群组操控</h3>
+<h4>实例化</h4>
+<pre><code>* 群组实例化
+* @param groupId 群组Id
+ITuyaGroup mITuyaGroup= TuyaHomeSdk.newGroupInstance(groupId);</code></pre>
+<h4>群组dp控制回调</h4>
+<pre><code>* 注册群组回调事件
+* @param listener 回调
+mITuyaGroup.registerGroupListener(new IGroupListener() {
+            @Override
+            public void onDpUpdate(long l, String s) {
+
+            }
+
+            @Override
+            public void onGroupInfoUpdate(long l) {
+
+            }
+
+            @Override
+            public void onGroupRemoved(long l) {
+
+            }
+        });
+
+* 注销群组回调事件
+mITuyaGroup.unRegisterGroupListener();</code></pre>
+<h4>发送群组控制命令</h4>
+<pre><code>* 发送群组控制命令
+* @param command 控制命令
+* @param listener 回调
+mTuyaGroup.publishDps(String command,IControlCallback listener);</code></pre>
+<p>代码范例</p>
+<pre><code>//群组开灯代码片段
+LampBean bean = new LampBean();
+bean.setOpen(true);
+HashMap&lt;String, Object&gt; hashMap = new HashMap&lt;&gt;();
+hashMap.put(STHEME_LAMP_DPID_1, bean.isOpen());
+mTuyaGroup.publishDps(JSONObject.toJSONString(hashMap),callback)；</code></pre>
+<p>注意事项</p>
+<pre><code>群组的发送命令返回结果，是指发送给云端成功，并不是指实际控制设备成功。 </code></pre>
+<h4>群组数据获取</h4>
+<p>本地获取群组数据，需要初始化Home（调用getHomeDetail()或者getHomeLocalCache）之后,才能取到数据</p>
+<pre><code>/**
+* 本地获取群组数据bean
+* @param groupId 群组id
+* @return GroupBean  群组数据类
+*/
+TuyaHomeSdk.getDataInstance().getGroupBean(long groupId);
+
+/**
+* 本地获取群组数据列表
+* @return  List&lt;GroupBean&gt;  群组列表
+*/
+TuyaHomeSdk.getDataInstance().getGroupDeviceList(long groupId);</code></pre>
+<h4> 群组数据销毁</h4>
+<pre><code>//群组数据销毁，建议退出群组控制页面的时候调用。
+mITuyaGroup.onDestroy();</code></pre>
+
+
+      </google-codelab-step>
+    
   </google-codelab>
 
   <script>
